@@ -15,7 +15,7 @@ from filters import KalmanFilter
 np.random.seed(ModelParams().random_seed)
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
-num_tracks = 1000
+num_tracks = 10000
 track_data = np.array(pd.read_csv('trajectories.csv', header=None))
 world = np.loadtxt('environment.csv', delimiter=',')
 all_data = dict()
@@ -83,7 +83,7 @@ for iteration, data in enumerate(test_loader):
     model.P[0, 0] = model.P[1, 1] = coeff*2
     
     for step in range(current_length):
-        model.draw(location[step], step, to_do=True, period=1, save_fig=True)
+        model.draw(location[step], step, to_do=True, period=1, save_fig=False)
         model.predict(motion[step])
         model.update(measurement[step])
         predicted_coord = model.x

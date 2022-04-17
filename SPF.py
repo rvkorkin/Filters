@@ -64,7 +64,7 @@ plt.close('all')
 
 int_loss = dict()
 fin_loss = dict()
-for current_length in np.arange(10, 110, 10):
+for current_length in np.arange(10, 60, 10):
     int_loss[current_length] = []
     fin_loss[current_length] = []
 t1 = time.time()
@@ -85,7 +85,7 @@ for data in  test_loader:
     model.x[:, :2][model.x[:, :2]>model.map_size] = model.map_size
     '''
     for step in range(current_length):
-        #model.draw(location[step], step, to_do=True, period=1, save_fig=True)
+        model.draw(location[step], step, to_do=True, period=1, save_fig=False)
         model.predict(motion[step])
         model.update(measurement[step])
         predicted_coord = (model.x * torch.exp(model.p)).sum(axis=0)
@@ -96,7 +96,7 @@ for data in  test_loader:
         if (step + 1) % 10 == 0:
             int_loss[step+1].append(deepcopy(curr_loss*current_length/(step+1)))
             fin_loss[step+1].append(loss**0.5)
-
+    break
 for current_length in np.arange(10, 110, 10):
     int_loss[current_length] = np.array(int_loss[current_length])
     fin_loss[current_length] = np.array(fin_loss[current_length])
